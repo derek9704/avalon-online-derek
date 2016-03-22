@@ -10,7 +10,8 @@ angular.module('app.game.room', [])
 
     //LEADER ACTIONS
     $scope.chooseTeam = function(playerId){
-      $scope.gameTemp.chosenTeam.push(playerId);        
+      if($scope.gameTemp.chosenTeam.indexOf(playerId) == -1)
+        $scope.gameTemp.chosenTeam.push(playerId);
     };
     $scope.removeFromTeam = function(playerId){
       var playerPos = $scope.gameTemp.chosenTeam.indexOf(playerId);
