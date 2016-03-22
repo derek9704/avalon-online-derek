@@ -1,0 +1,37 @@
+<!-- Show all open rooms if user has not joined room -->
+<div class='lobby-rooms' ng-hide='user.room'>
+  <div class='box-header'>
+    <div class='lobby-rooms-title'>
+      <h3>Open rooms</h3>
+    </div>
+    <div class='lobby-header-buttons'>
+      <select ng-model="roomCount" ng-init="roomCount=5">
+        <option value ="5">5 Players</option>
+        <option value ="6">6 Players</option>
+        <option value ="7">7 Players</option>
+        <option value ="8">8 Players</option>
+        <option value ="9">9 Players</option>
+        <option value ="10">10 Players</option>
+      </select>
+      <input ng-model='openRoomName' placeholder='New Room Name...' \>
+      <button ng-click='openRoom(openRoomName, roomCount)'>Open New Room</button>
+    </div>
+  </div>
+  <div class='lobby-room' ng-repeat='(roomName, room) in rooms'>
+    <span class='lobby-room-name'>{{roomName}}</span>
+    <span class='lobby-room-player-count'> - {{room.count}} / {{room.limit}} players:  </span>
+    <span class='lobby-room-player-names'>
+      <span ng-repeat='(playerId, player) in room.players'>{{player.name}} </span>
+    </span>
+    <button class='lobby-room-join-button' ng-click='joinRoom(roomName)'>Join</button>
+  </div>
+</div>
+
+<!-- Show joined room if user has joined room -->
+<div class='lobby-ownroom' ng-show='user.room'>
+  <h4>You have joined {{user.room}} - {{rooms[user.room].count}} in room!</h4>
+  <p>Players: 
+    <span ng-repeat='(playerId, player) in rooms[user.room].players'>{{player.name}} </span>
+  </p>
+  <button ng-click='leaveRoom(user.room)'>Exit</button>
+</div>

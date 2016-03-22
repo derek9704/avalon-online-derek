@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html ng-app='app'>
+<head>
+  <title>Avalon</title>
+  <!-- font awesome icon library -->
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <!-- build:css css/app.min.css -->
+  <link rel='stylesheet' href='reset.css'>
+  <link rel='stylesheet' href='index.css'>
+  <link rel='stylesheet' href='/modules/welcome/welcome.css'>
+  <link rel='stylesheet' href='/modules/game/game.css'>
+  <link rel='stylesheet' href='modules/game/header/game.header.css'>
+  <link rel='stylesheet' href='modules/game/lobby/game.lobby.css'>
+  <link rel='stylesheet' href='modules/game/room/game.room.css'>
+  <!-- endbuild -->
+</head>
+
+<body>
+  <!-- Facebook SDK -->
+  <!-- build:js js/fbsdk.js -->
+  <!-- <script src='modules/app/FBsdk.js'></script> -->
+  <!-- endbuild -->
+
+  <div class='app' ui-view></div>
+
+  <!-- Bower dependencies -->
+  <script src='lib/jquery/dist/jquery.min.js'></script>
+  <script src='lib/underscore/underscore.js'></script>
+  <script src='lib/angular/angular.min.js'></script>
+  <script src='lib/angular-ui-router/release/angular-ui-router.min.js'></script>
+  <script src='lib/angular-cookies/angular-cookies.min.js'></script>
+  <script src="/socket.io/socket.io.js"></script>
+
+
+  <!-- build:js js/app.min.js -->
+  <script src='modules/app/app.js'></script>
+  <script src='modules/welcome/welcome.js'></script>
+  <script src='modules/game/game.js'></script>
+  <script src='modules/game/header/game.header.js'></script>
+  <script src='modules/game/lobby/game.lobby.js'></script>
+  <script src='modules/game/room/game.room.js'></script>
+  <!-- endbuild -->
+
+</body>
+</html>
