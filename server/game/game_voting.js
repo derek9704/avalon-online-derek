@@ -11,13 +11,17 @@ var GameMain = require('./../game');
 var GameMission = require('./game_mission');
 
 var chooseTeam = exports.chooseTeam = function(game){
-  GameMain.updateGameInfo(game);
 
   var leaderNo = game.info.leaderNo;
   var leaderId = game.info.leaderPositions[leaderNo % game.info.size];
   //get leader's socket object
   var leaderSocket = players.PtoS[leaderId];
   var leaderSocketId = game.players[leaderId].socket;
+  //add log
+  var text = game.players[leaderId].name + " is choosing the team."
+  game.log.unshift(text);
+
+  GameMain.updateGameInfo(game);
 
   var gameSize = game.info.size;
   var missionNo = game.info.missionNo;
@@ -54,10 +58,14 @@ var voteTeam = exports.voteTeam = function(game){
   var leaderId = team.leader;
   var chosenTeam = team.members;
 
-  //DON'T USE FOR..IN loop
   _.each(game.players, function(player, playerId){
     var playerSocket = players.PtoS[playerId];
     playerSocket.on('C_submitVote', function(data){
+      //add log
+      var text = game.players[playerId].name + " voted."
+      game.log.unshift(text);
+      GameMain.updateGameInfo(game);
+
       var vote = data.vote;
       team.approvedVotes[playerId] = vote;
 
@@ -75,8 +83,16 @@ var voteTeam = exports.voteTeam = function(game){
 };
 
 var votingResult = exports.votingResult = function(game){
+
   var leaderNo = game.info.leaderNo;
   var team = game.teams[leaderNo];
+
+  //add log
+  var text = "members: " + JSON.stringify(team.members);
+  game.log.unshift(text);  
+  text = "approvedVotes: " + JSON.stringify(team.approvedVotes);
+  game.log.unshift(text);
+
   var gameSize = game.info.size;
   var approvedVotesCount = _.reduce(team.approvedVotes, function(memo, vote){
     return vote ? memo + 1 : memo;
@@ -86,6 +102,9 @@ var votingResult = exports.votingResult = function(game){
     team.approved = true;
     game.info.rejectedTeamTally = 0;
 
+    text = "approved: true";
+    game.log.unshift(text);
+
     GameMission.startMission(game);
 
   }else{
@@ -94,13 +113,16 @@ var votingResult = exports.votingResult = function(game){
     game.info.rejectedTeamTally++;
     game.info.leaderNo++;
 
-    GameMain.statusLogger(game);
+    text = "approved: false";
+    game.log.unshift(text);
+
     //next leader chooses team
     chooseTeam(game);
   }
 };
 
 var teamSizes = {
+  3: [1,2,1,2,2],
   5: [2,3,2,3,3],
   6: [2,3,4,3,4],
   7: [2,3,3,4,4],

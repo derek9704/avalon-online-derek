@@ -3,6 +3,10 @@ angular.module('app.game', ['app.game.header', 'app.game.lobby', 'app.game.room'
 
     $rootScope.Socket = io.connect('/');
     $state.go('game.lobby');
+    $rootScope.Socket.emit('C_enterLobby', {
+      id: $rootScope.user.id,
+      name: $rootScope.user.name
+    });     
 
     //should be scope!
     $scope.gameStatus = {

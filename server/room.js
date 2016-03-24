@@ -2,7 +2,6 @@ var io = require('./../server').io;
 var players = require('./../server').players;
 var rooms = require('./../server').rooms;
 
-var Lobby = require('./lobby');
 var Game = require('./game');
 
 io.on('connection', function(socket){
@@ -13,13 +12,13 @@ io.on('connection', function(socket){
   socket.on('C_openRoom', function(data){
     var playerId = data.playerId;
     var roomName = data.roomName;
-    var roomCount = data.roomCount;
+    var roomLimit = data.roomLimit;
     if(!rooms.open[roomName] && !rooms.closed[roomName]){
       this.join(roomName);
       rooms.open[roomName] = {
         name: roomName,
         players: {},
-        limit: roomCount,
+        roomLimit: roomLimit,
         count: 1
       };
       //SUPER HACKY
@@ -61,8 +60,8 @@ io.on('connection', function(socket){
     //emit new room status to room members
     updateRoom(roomName);
 
-    //If number of players > 4, startGame
-    if(room.count >= room.limit){
+    //If number of players >= limit, startGame
+    if(room.count >= room.roomLimit){
       //move room from open to closed
       rooms.closed[roomName] = room;
       delete rooms.open[roomName];
@@ -86,7 +85,7 @@ io.on('connection', function(socket){
       room.count--;
     }
 
-    killEmptyRoom(roomName);
+    killEmptyOpenRoom(roomName);
 
     //update player info for himself
     delete players.players[playerId].room;
@@ -140,9 +139,10 @@ io.on('connection', function(socket){
 
 var updateRooms = exports.updateRooms = function(){
   io.emit('S_updateRooms', {
-    rooms: rooms.open
+    rooms: rooms
   });
 };
+
 var updateRoom = exports.updateRoom = function(roomName){
   io.to(roomName).emit('S_updateRoom', {
     room: rooms.open[roomName]
@@ -160,7 +160,6 @@ var killEmptyClosedRoom = exports.killEmptyClosedRoom = function(roomName){
     delete rooms.closed[roomName];
   }
 };
-
 
 var updatePlayer = function(socket){
   var playerId = players.StoP[socket.id];

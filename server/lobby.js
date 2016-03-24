@@ -1,13 +1,7 @@
 var io = require('./../server').io;
 var players = require('./../server').players;
 
-var Room = require('./room');
-var Game = require('./game');
-
 io.on('connection', function(socket){
-  // console.log('socket connected: ' + socket.id);
-  // console.log(socket.handshake.address);
-
   socket.on('C_enterLobby', function(data){
     var playerName = data.name;
     var playerId = data.id;
@@ -20,7 +14,8 @@ io.on('connection', function(socket){
       };
       players.PtoS[playerId] = socket;
       players.StoP[socket.id] = playerId;
-    }else{
+    }
+    else{
       //player already entered lobby
       socket.emit('S_denyFromLobby', {});
     }

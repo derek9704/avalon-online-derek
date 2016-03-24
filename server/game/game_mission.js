@@ -18,12 +18,16 @@ var startMission = exports.startMission = function(game){
   var leaderNo = game.info.leaderNo;
   var team = game.teams[leaderNo];
   var mission = {
-    team: team,
     successDecisions: {},
   };
   _.each(team.members, function(playerId){
     var playerSocket = players.PtoS[playerId];
     playerSocket.on('C_submitDecision', function(data){
+      //add log
+      var text = game.players[playerId].name + " completed mission."
+      game.log.unshift(text);
+      GameMain.updateGameInfo(game);
+
       var decision = data.decision;
       mission.successDecisions[playerId] = decision;
 
@@ -73,7 +77,11 @@ var missionOutcome = exports.missionOutcome = function(game){
     game.info.missionNo++;
     game.info.leaderNo++;
 
-    GameMain.statusLogger(game);
+    //add log
+    var text = "success: " + mission.success;
+    game.log.unshift(text);
+    game.log.unshift('－－－－－－－－－－－－－－－－');
+
     //next leader chooses team
     GameVoting.chooseTeam(game);    
   }

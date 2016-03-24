@@ -9,7 +9,7 @@
   </div>
   <div class='room-waiting-info'>
     <h3 class='room-waiting-notice'>Waiting for enough players!</h3>
-    <span class='lobby-room-player-count'>{{room.count}} / {{room.limit}}:  </span>
+    <span class='lobby-room-player-count'>{{room.count}} / {{room.roomLimit}}:  </span>
     <span class='lobby-room-player-names'>
       <span ng-repeat='(playerId, player) in room.players'>{{player.name}} </span>
     </span>
@@ -20,7 +20,7 @@
   <div class='game-status'>
     <div class='game-status-info'>
       <span>We are at mission {{game.info.missionNo + 1}} /</span>
-      <span>Completed Mission(s):
+      <span>Completed Missions:
         <span ng-repeat='(missionId, mission) in game.missions'>
           {{missionId + 1}}: {{mission.success ? 'Success' : 'Fail'}}
         </span>
@@ -74,22 +74,21 @@
     <br>
     <span>Stay in room for another game?</span>
     <button ng-click='stayInRoom()'>Yes</button>
-    <button ng-click='leaveRoom(room.name)'>No</button>
-  </div>
-
-  <div class='game-me' ng-class='{"game-player-good": game.me.isGood === true, "game-player-evil": game.me.isGood === false}'>
-    <h4 class='game-me-you'>You</h4>
-    <p class='game-me-role'>{{game.me.role}}</p>
-    <button ng-show='(gameStatus.leader && gameTemp.chosenTeam.length < gameTemp.teamSize)' ng-click='chooseTeam(user.id)'>Pick</button>
+    <button ng-click='leaveRoomAfterGame(room.name)'>No</button>
   </div>
 
   <div class='game-players'>
-    <div class='game-player' ng-repeat='(playerId, player) in game.players' ng-hide='playerId === user.id' ng-class='{"game-player-good": player.isGood === true, "game-player-evil": player.isGood === false}'>
-      <h4 class='game-player-name'>{{player.name}}</h4>
+    <div class='game-player' ng-repeat='(playerId, player) in game.players' ng-class='{"game-player-good": player.isGood === true, "game-player-evil": player.isGood === false}'>
+      <h4 class='game-player-name' ng-hide='playerId === user.id'>{{player.name}}</h4>
+      <h4 class='game-me-you' ng-hide='playerId !== user.id'>You</h4>
       <p class='game-player-role'>{{player.role}}</p>
       <button ng-show='gameStatus.leader && gameTemp.chosenTeam.length < gameTemp.teamSize' ng-click='chooseTeam(playerId)'>Pick</button>
       <button ng-show='gameStatus.assassin && player.role === "unknown"' ng-click='chooseKill(playerId)'>Pick</button>
     </div>
+  </div>
+
+  <div class='game-log'>
+    <p ng-repeat='text in game.log track by $index'>{{text}}</p>
   </div>
 
 </div>

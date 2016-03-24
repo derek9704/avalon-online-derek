@@ -8,8 +8,6 @@ var Lobby = require('./lobby');
 var Room = require('./room');
 
 var GameVoting = require('./game/game_voting');
-var GameMission = require('./game/game_mission');
-var GameEnding = require('./game/game_ending');
 
 io.on('connection', function(socket){
 
@@ -33,7 +31,8 @@ exports.startGame = function(roomName){
       successMissionTally: 0,
       failMissionTally: 0
     },
-    results: {}
+    results: {},
+    log: []
   };
 
   io.in(roomName).emit('S_startGame');
@@ -102,17 +101,9 @@ var updateGameInfo = exports.updateGameInfo = function(game){
   });
 };
 
-exports.statusLogger = function(game){
-  console.log('Leader No.: ' + game.info.leaderNo);
-  console.log('Mission No.: ' + game.info.missionNo);
-  console.log('All chosen teams:');
-  console.log(game.teams);
-  console.log('All finished missions:');
-  console.log(game.missions);
-};
-
 var shuffleRoles = function(num){
   var roles = {
+    3: ['merlin','warrior','assassin'],
     5: ['merlin', 'percival', 'warrior', 'morgana', 'assassin'],
     6: ['merlin', 'percival', 'warrior', 'warrior', 'morgana', 'assassin'],
     7: ['merlin', 'percival', 'warrior', 'warrior', 'morgana', 'oberon', 'assassin'],

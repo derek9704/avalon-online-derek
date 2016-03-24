@@ -79,11 +79,10 @@ angular.module('app.game.room', [])
     $scope.stayInRoom = function(){
       $rootScope.Socket.emit('C_stayInRoom');
       delete $rootScope.game;
-
+      
       delete $scope.gameTemp.goodWins;
-
     };
-    $scope.leaveRoom = function(){
+    $scope.leaveRoomAfterGame = function(){
       $rootScope.Socket.emit('C_leaveRoomAfterGame');
       delete $rootScope.game;
       delete $rootScope.user.room;
