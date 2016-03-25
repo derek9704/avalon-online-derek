@@ -32,9 +32,9 @@
 
 <!-- Show joined room if user has joined room -->
 <div class='lobby-ownroom' ng-show='user.room'>
-  <h4>You have joined {{user.room}} - {{rooms[user.room].count}} in room!</h4>
+  <h4>You have joined room - {{user.room.name}} !</h4>
   <p>Players: 
-    <span ng-repeat='(playerId, player) in rooms[user.room].players'>{{player.name}} </span>
+    <span ng-repeat='(playerId, player) in user.room.players'>{{player.name}} </span>
   </p>
-  <button ng-click='leaveRoom(user.room)'>Exit</button>
+  <button ng-click='leaveRoom(user.room.name)'>Exit</button>
 </div>

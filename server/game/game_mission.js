@@ -78,7 +78,7 @@ var missionOutcome = exports.missionOutcome = function(game){
     game.info.leaderNo++;
 
     //add log
-    var text = "success: " + mission.success;
+    var text = "success: " + mission.success + " (" + failDecisionsCount + " fail decisions)";
     game.log.push(text);
     game.log.push('－－－－－－－－－－－－－－－－');
 
