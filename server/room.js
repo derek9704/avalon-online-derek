@@ -74,6 +74,13 @@ io.on('connection', function(socket){
     }
   });
 
+  socket.on('C_watchRoom', function(data){
+    var roomName = data.roomName;
+    var room = rooms.closed[roomName];
+    var playerId = players.StoP[socket.id];
+    Game.addWatcher(room.game, playerId);
+  });  
+
   socket.on('C_leaveRoom', function(data){
     var roomName = data.roomName;
     var room = rooms.open[roomName];
@@ -117,12 +124,12 @@ io.on('connection', function(socket){
     for(var roomName in rooms.closed){
       var room = rooms.closed[roomName];
       if(room.players[playerId]){
+        Game.playerLeave(room.game, room.players[playerId].name);
+
         delete room.players[playerId];
         room.count--;
 
         killEmptyClosedRoom(roomName);
-        //emit new room status to room members
-        updateRoom(roomName);
       }
     }
 

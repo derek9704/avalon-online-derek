@@ -40,6 +40,9 @@ var chooseTeam = exports.chooseTeam = function(game){
       game.teams.push(team);
       //remove listener after being leader - can be used once only
       delete leaderSocket._events.C_submitTeam;
+      //add log
+      var text = "members: " + JSON.stringify(teamMembers);
+      game.log.push(text);
 
       voteTeam(game);
     }
@@ -87,9 +90,7 @@ var votingResult = exports.votingResult = function(game){
   var leaderNo = game.info.leaderNo;
   var team = game.teams[leaderNo];
 
-  //add log
-  var text = "members: " + JSON.stringify(team.members);
-  game.log.push(text);  
+  //add log 
   text = "approvedVotes: " + JSON.stringify(team.approvedVotes);
   game.log.push(text);
 

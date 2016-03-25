@@ -18,6 +18,7 @@ exports.startGame = function(roomName){
   var game = {
     room: roomName,
     players: {},
+    watchers: {},
     teams: [],
     missions: [],
     info: {
@@ -34,6 +35,7 @@ exports.startGame = function(roomName){
     results: {},
     log: []
   };
+  room.game = game;
 
   io.in(roomName).emit('S_startGame');
   var roles = shuffleRoles(room.count);
@@ -99,6 +101,27 @@ var updateGameInfo = exports.updateGameInfo = function(game){
     var gameInfo = gameInfoFilter(game, playerId);
     io.to(player.socket).emit('S_updateGame', {info: gameInfo});
   });
+  _.each(game.watchers, function(player, playerId){
+    io.to(player.socket).emit('S_updateGame', {info: game});
+  });  
+};
+
+var addWatcher = exports.addWatcher = function(game, playerId){
+  var player = players.players[playerId];
+  game.watchers[playerId] = {
+    name: player.name,
+    socket: players.PtoS[playerId].id
+  };
+  //add log
+  var text = player.name + " is watching.";
+  game.log.push(text);
+  updateGameInfo(game);
+};
+
+var playerLeave = exports.playerLeave = function(game, name){
+  var text = name + " left, game is over.";
+  game.log.push(text);
+  updateGameInfo(game);
 };
 
 var shuffleRoles = function(num){

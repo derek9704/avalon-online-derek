@@ -26,6 +26,7 @@
     <span class='lobby-room-player-names'>
       <span ng-repeat='(playerId, player) in room.players'>{{player.name}} </span>
     </span>
+    <button class='lobby-room-watch-button' ng-click='watchRoom(roomName)'>Watch</button>
   </div>  
 </div>
 

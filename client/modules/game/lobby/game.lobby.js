@@ -38,6 +38,12 @@ angular.module('app.game.lobby', [])
         roomName: roomName
       });
     };
+    $scope.watchRoom = function(roomName){
+      $state.go('game.room');
+      $rootScope.Socket.emit('C_watchRoom', {
+        roomName: roomName
+      });
+    };
     
     $scope.quitGame = function(){
       //hack
