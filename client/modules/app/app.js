@@ -41,7 +41,10 @@ angular.module('app', [
       });
 
      $urlRouterProvider.otherwise('/');
-     $locationProvider.html5Mode(true);
+     $locationProvider.html5Mode({
+       enabled: true,
+       requireBase: false
+     });
   }])
 
   .controller('AppCtrl', ['$scope', '$state', function($scope, $state){

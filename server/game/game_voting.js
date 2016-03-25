@@ -19,7 +19,7 @@ var chooseTeam = exports.chooseTeam = function(game){
   var leaderSocketId = game.players[leaderId].socket;
   //add log
   var text = game.players[leaderId].name + " is choosing the team."
-  game.log.unshift(text);
+  game.log.push(text);
 
   GameMain.updateGameInfo(game);
 
@@ -63,7 +63,7 @@ var voteTeam = exports.voteTeam = function(game){
     playerSocket.on('C_submitVote', function(data){
       //add log
       var text = game.players[playerId].name + " voted."
-      game.log.unshift(text);
+      game.log.push(text);
       GameMain.updateGameInfo(game);
 
       var vote = data.vote;
@@ -89,9 +89,9 @@ var votingResult = exports.votingResult = function(game){
 
   //add log
   var text = "members: " + JSON.stringify(team.members);
-  game.log.unshift(text);  
+  game.log.push(text);  
   text = "approvedVotes: " + JSON.stringify(team.approvedVotes);
-  game.log.unshift(text);
+  game.log.push(text);
 
   var gameSize = game.info.size;
   var approvedVotesCount = _.reduce(team.approvedVotes, function(memo, vote){
@@ -103,7 +103,7 @@ var votingResult = exports.votingResult = function(game){
     game.info.rejectedTeamTally = 0;
 
     text = "approved: true";
-    game.log.unshift(text);
+    game.log.push(text);
 
     GameMission.startMission(game);
 
@@ -114,7 +114,7 @@ var votingResult = exports.votingResult = function(game){
     game.info.leaderNo++;
 
     text = "approved: false";
-    game.log.unshift(text);
+    game.log.push(text);
 
     //next leader chooses team
     chooseTeam(game);

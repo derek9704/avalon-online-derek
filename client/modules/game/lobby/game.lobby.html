@@ -5,14 +5,8 @@
       <h3>Open rooms</h3>
     </div>
     <div class='lobby-header-buttons'>
-      <select ng-model="roomLimit" ng-init="roomLimit=5">
-        <option value ="3">3 Players</option>
-        <option value ="5">5 Players</option>
-        <option value ="6">6 Players</option>
-        <option value ="7">7 Players</option>
-        <option value ="8">8 Players</option>
-        <option value ="9">9 Players</option>
-        <option value ="10">10 Players</option>
+      <select ng-model="roomLimit">
+        <option ng-repeat="(x,y) in roomLimits" value="{{x}}">{{y}}</option>
       </select>
       <input ng-model='openRoomName' placeholder='New Room Name...' \>
       <button ng-click='openRoom(openRoomName, roomLimit)'>Open New Room</button>

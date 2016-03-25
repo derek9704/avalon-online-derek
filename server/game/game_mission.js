@@ -25,7 +25,7 @@ var startMission = exports.startMission = function(game){
     playerSocket.on('C_submitDecision', function(data){
       //add log
       var text = game.players[playerId].name + " completed mission."
-      game.log.unshift(text);
+      game.log.push(text);
       GameMain.updateGameInfo(game);
 
       var decision = data.decision;
@@ -79,8 +79,8 @@ var missionOutcome = exports.missionOutcome = function(game){
 
     //add log
     var text = "success: " + mission.success;
-    game.log.unshift(text);
-    game.log.unshift('－－－－－－－－－－－－－－－－');
+    game.log.push(text);
+    game.log.push('－－－－－－－－－－－－－－－－');
 
     //next leader chooses team
     GameVoting.chooseTeam(game);    

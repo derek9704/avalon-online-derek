@@ -16,7 +16,7 @@ var assassinAction = exports.assassinAction = function(game){
     if(player.role === 'assassin'){
       //add log
       var text = player.name + " is assassinating.";
-      game.log.unshift(text);
+      game.log.push(text);
       GameMain.updateGameInfo(game);
       //assassin logic
       var assassinId = playerId;
@@ -25,7 +25,7 @@ var assassinAction = exports.assassinAction = function(game){
         var targetId = data.target;
         //add log
         var text = game.players[targetId].name + " is killed.";
-        game.log.unshift(text);
+        game.log.push(text);
 
         if(game.players[targetId].role === 'merlin'){
           //assassin success; evil wins

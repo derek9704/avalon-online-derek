@@ -27,6 +27,7 @@
          /
       </span>
       <span>Rejected Team Tally: {{game.info.rejectedTeamTally}}</span>
+    </div>
   </div>
 
   <!-- game table -->
@@ -87,7 +88,7 @@
     </div>
   </div>
 
-  <div class='game-log'>
+  <div class='game-log' scroll-glue>
     <p ng-repeat='text in game.log track by $index'>{{text}}</p>
   </div>
 

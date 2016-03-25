@@ -1,4 +1,4 @@
-angular.module('app.game.room', [])
+angular.module('app.game.room', ['luegg.directives'])
   .controller('GameRoomCtrl', ['$rootScope', '$scope', '$state', function($rootScope, $scope, $state){
 
     $scope.leaveRoom = function(roomName){

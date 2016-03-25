@@ -13,9 +13,9 @@
   "author": "Derek Lee",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.4.4",
-    "socket.io": "^1.0.6",
-    "lodash": "^4.0.0"
+    "express": "latest",
+    "socket.io": "latest",
+    "lodash": "latest"
   },
   "devDependencies": {
   }
