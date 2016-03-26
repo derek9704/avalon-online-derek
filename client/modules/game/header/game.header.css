@@ -33,7 +33,6 @@ margin shorthand: top right bottom left;
 }
 
 .header-buttons{
-  /*hack*/
   position: absolute;
   right: 50px;
   top: 20px;

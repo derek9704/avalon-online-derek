@@ -17,16 +17,16 @@ var chooseTeam = exports.chooseTeam = function(game){
   //get leader's socket object
   var leaderSocket = players.PtoS[leaderId];
   var leaderSocketId = game.players[leaderId].socket;
-  //add log
-  var text = game.players[leaderId].name + " is choosing the team."
-  game.log.push(text);
-
-  GameMain.updateGameInfo(game);
 
   var gameSize = game.info.size;
   var missionNo = game.info.missionNo;
 
   var size = teamSizes[gameSize][missionNo];
+  
+  //add log
+  var text = game.players[leaderId].name + " is choosing the team. (" + size + ")";
+  game.log.push(text);
+  GameMain.updateGameInfo(game);
 
   leaderSocket.on('C_submitTeam', function(data){
     var teamMembers = data.chosenTeam;
@@ -43,8 +43,13 @@ var chooseTeam = exports.chooseTeam = function(game){
       //add log
       var text = "members: " + JSON.stringify(teamMembers);
       game.log.push(text);
-
-      voteTeam(game);
+      //forced start mission
+      if(game.info.rejectedTeamTally >= 4){
+        game.info.rejectedTeamTally = 0;
+        GameMission.startMission(game);
+      }else{
+        voteTeam(game);
+      }
     }
   });
 

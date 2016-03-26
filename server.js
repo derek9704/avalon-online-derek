@@ -8,6 +8,7 @@ var io = exports.io = require('socket.io')(server);
 //game server current storage
 //player storage: PlayerId to Socket (NOT JUST ID!) & SocketId to PlayerId
 var players = exports.players = {players: {}, PtoS: {}, StoP: {}};
+var database = exports.database = {players: {}};
 var rooms = exports.rooms = {open: {}, closed: {}};
 
 //set default NODE_ENV to 'development'
@@ -34,6 +35,8 @@ console.log('Avalon server listening at ' + port);
 var lobbyLogger = function(){
   console.log('players:');
   console.log(players);
+  console.log('database:');
+  console.log(database);  
   console.log('rooms:');
   console.log(rooms);
 };

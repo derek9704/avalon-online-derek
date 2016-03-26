@@ -65,6 +65,11 @@ var missionOutcome = exports.missionOutcome = function(game){
     game.info.failMissionTally++;
   }
 
+  //add log
+  var text = "success: " + mission.success + " (" + failDecisionsCount + " fail decisions)";
+  game.log.push(text);
+  game.log.push('－－－－－－－－－－－－－－－－');  
+
   if(game.info.successMissionTally > 2){
     //missions over; assassin kills
     GameEnding.assassinAction(game);
@@ -76,11 +81,6 @@ var missionOutcome = exports.missionOutcome = function(game){
     //game on
     game.info.missionNo++;
     game.info.leaderNo++;
-
-    //add log
-    var text = "success: " + mission.success + " (" + failDecisionsCount + " fail decisions)";
-    game.log.push(text);
-    game.log.push('－－－－－－－－－－－－－－－－');
 
     //next leader chooses team
     GameVoting.chooseTeam(game);    

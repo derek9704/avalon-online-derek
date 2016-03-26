@@ -76,12 +76,6 @@ angular.module('app.game.room', ['luegg.directives'])
     };
 
     //ENDGAME ACTION
-    $scope.stayInRoom = function(){
-      $rootScope.Socket.emit('C_stayInRoom');
-      delete $rootScope.game;
-      
-      delete $scope.gameTemp.goodWins;
-    };
     $scope.leaveRoomAfterGame = function(){
       $rootScope.Socket.emit('C_leaveRoomAfterGame');
       delete $rootScope.game;

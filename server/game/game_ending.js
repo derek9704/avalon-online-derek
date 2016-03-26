@@ -2,6 +2,7 @@ var _ = require('lodash');
 
 var io = require('./../../server').io;
 var players = require('./../../server').players;
+var database = require('./../../server').database;
 var rooms = require('./../../server').rooms;
 
 var Lobby = require('./../lobby');
@@ -51,32 +52,32 @@ var resolveGame = exports.resolveGame = function(game){
   var room = rooms.closed[roomName];
   var goodWins = game.results.goodWins;
 
+  //add log
+  var text = goodWins ? 'good' : 'evil' + " prevail!!!";
+  game.log.push(text);
   GameMain.updateGameInfo(game);
 
   io.to(roomName).emit('S_resolveGame', {goodWins: goodWins});
 
-  var stayingPlayers = [];
-
   _.each(game.players, function(player, playerId){
     var playerSocket = players.PtoS[playerId];
-    playerSocket.on('C_stayInRoom', function(){
-      stayingPlayers.push(playerId);
-      if(stayingPlayers.length === game.info.size){
-        //all players stay; start a new game; all current game data in memory lost
-        GameMain.startGame(roomName);
-      }
-    });
+    //save game result to database
+    if(player.isGood && goodWins || !player.isGood && !goodWins){
+      players.players[playerId].winNum++;
+      database.players[playerId].winNum++;
+    }else{
+      players.players[playerId].loseNum++;
+      database.players[playerId].loseNum++;
+    }
+    Room.updatePlayer(playerSocket);
+
     playerSocket.on('C_leaveRoomAfterGame', function(){
-      //one player leaves; room open again
       this.leave(roomName);
       //update room data
       delete room.players[playerId];
       room.count--;
 
-      rooms.open[roomName] = room;
-      delete rooms.closed[roomName];
-
-      Room.killEmptyOpenRoom(roomName);
+      Room.killEmptyClosedRoom(roomName);
 
       //change of room member status:
       //emit new rooms status to all
@@ -85,6 +86,4 @@ var resolveGame = exports.resolveGame = function(game){
       Room.updateRoom(roomName);
     });
   });
-
-  //save game result to database
 };

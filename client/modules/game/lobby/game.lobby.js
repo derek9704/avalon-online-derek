@@ -44,10 +44,5 @@ angular.module('app.game.lobby', [])
         roomName: roomName
       });
     };
-    
-    $scope.quitGame = function(){
-      //hack
-      $location.path('/');
-    };
 
   }]);

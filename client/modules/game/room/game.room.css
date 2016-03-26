@@ -67,7 +67,6 @@
   line-height: 2em;
 }
 .room-game button{
-  /*hack*/
   margin: 0px;
   padding: 10px;
   font-size: 20px;
@@ -80,7 +79,7 @@
   width: 300px;
   height: 320px;
   padding: 10px;
-  position: fixed;
-  top: 170px;
-  right: 20px;
 }
+@media screen and (min-width: 1260px) { 
+.game-log {position: fixed; top: 170px; right: 20px;} 
+} 

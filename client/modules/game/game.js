@@ -6,7 +6,7 @@ angular.module('app.game', ['app.game.header', 'app.game.lobby', 'app.game.room'
     $rootScope.Socket.emit('C_enterLobby', {
       id: $rootScope.user.id,
       name: $rootScope.user.name
-    });     
+    });
 
     //should be scope!
     $scope.gameStatus = {
@@ -34,7 +34,6 @@ angular.module('app.game', ['app.game.header', 'app.game.lobby', 'app.game.room'
 
     $rootScope.Socket.on('S_updateRoom', function(data){
       $rootScope.$apply(function(){
-        //hack: should be $scope.room
         $rootScope.room = data.room;
       });
     });

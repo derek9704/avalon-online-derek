@@ -73,9 +73,7 @@
     <span>The {{gameTemp.goodWins ? 'good' : 'evil'}} prevail!</span>
     <span>YOU HAVE {{gameTemp.victory ? 'WON' : 'LOST'}}!</span>
     <br>
-    <span>Stay in room for another game?</span>
-    <button ng-click='stayInRoom()'>Yes</button>
-    <button ng-click='leaveRoomAfterGame(room.name)'>No</button>
+    <button ng-click='leaveRoomAfterGame(room.name)'>Leave Room</button>
   </div>
 
   <div class='game-players'>

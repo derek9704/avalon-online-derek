@@ -21,7 +21,6 @@ io.on('connection', function(socket){
         roomLimit: roomLimit,
         count: 1
       };
-      //SUPER HACKY
       rooms.open[roomName].players[playerId] = {
         name: players.players[playerId].name,
         socket: socket.id
@@ -45,7 +44,6 @@ io.on('connection', function(socket){
     var room = rooms.open[roomName];
     var playerId = players.StoP[socket.id];
     this.join(roomName);
-    //SUPER HACKY
     room.players[playerId] = {
       name: players.players[playerId].name,
       socket: socket.id
@@ -168,7 +166,7 @@ var killEmptyClosedRoom = exports.killEmptyClosedRoom = function(roomName){
   }
 };
 
-var updatePlayer = function(socket){
+var updatePlayer = exports.updatePlayer = function(socket){
   var playerId = players.StoP[socket.id];
   socket.emit('S_updatePlayer', {
     player: players.players[playerId]
