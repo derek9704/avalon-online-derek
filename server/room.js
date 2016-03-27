@@ -149,9 +149,15 @@ var updateRooms = exports.updateRooms = function(){
 };
 
 var updateRoom = exports.updateRoom = function(roomName){
-  io.to(roomName).emit('S_updateRoom', {
-    room: rooms.open[roomName]
-  });
+  if(rooms.open[roomName]){
+    io.to(roomName).emit('S_updateRoom', {
+      room: rooms.open[roomName]
+    });
+  }else if(rooms.closed[roomName]){
+    io.to(roomName).emit('S_updateRoom', {
+      room: rooms.closed[roomName]
+    });
+  }
 };
 
 var killEmptyOpenRoom = exports.killEmptyOpenRoom = function(roomName){

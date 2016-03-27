@@ -59,8 +59,47 @@ var resolveGame = exports.resolveGame = function(game){
 
   io.to(roomName).emit('S_resolveGame', {goodWins: goodWins});
 
+  var stayingPlayers = [];
+  var leavingPlayers = [];
+
   _.each(game.players, function(player, playerId){
     var playerSocket = players.PtoS[playerId];
+    delete playerSocket._events.C_stayInRoom;
+    playerSocket.on('C_stayInRoom', function(){
+      stayingPlayers.push(playerId);
+      if(stayingPlayers.length === game.info.size){
+        //all players stay; start a new game; all current game data in memory lost
+        GameMain.startGame(roomName);
+      }
+      else if(stayingPlayers.length + leavingPlayers.length === game.info.size){
+        rooms.open[roomName] = room;
+        delete rooms.closed[roomName];
+        //change of room member status:
+        //emit new rooms status to all
+        Room.updateRooms();
+        //emit new room status to room members
+        Room.updateRoom(roomName);        
+      }      
+    });
+    delete playerSocket._events.C_leaveRoomAfterGame;
+    playerSocket.on('C_leaveRoomAfterGame', function(){
+      leavingPlayers.push(playerId);
+      this.leave(roomName);
+      //update room data
+      delete room.players[playerId];
+      room.count--;
+
+      if(stayingPlayers.length + leavingPlayers.length === game.info.size){
+        rooms.open[roomName] = room;
+        delete rooms.closed[roomName];
+        Room.killEmptyOpenRoom(roomName);
+      }
+      //change of room member status:
+      //emit new rooms status to all
+      Room.updateRooms();
+      //emit new room status to room members
+      Room.updateRoom(roomName);
+    });       
     //save game result to database
     if(player.isGood && goodWins || !player.isGood && !goodWins){
       players.players[playerId].winNum++;
@@ -70,20 +109,5 @@ var resolveGame = exports.resolveGame = function(game){
       database.players[playerId].loseNum++;
     }
     Room.updatePlayer(playerSocket);
-
-    playerSocket.on('C_leaveRoomAfterGame', function(){
-      this.leave(roomName);
-      //update room data
-      delete room.players[playerId];
-      room.count--;
-
-      Room.killEmptyClosedRoom(roomName);
-
-      //change of room member status:
-      //emit new rooms status to all
-      Room.updateRooms();
-      //emit new room status to room members
-      Room.updateRoom(roomName);
-    });
   });
 };
