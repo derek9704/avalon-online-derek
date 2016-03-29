@@ -76,7 +76,7 @@
 }
 .game-log{
   overflow-y: scroll;
-  width: 24%;
+  width: 25%;
   height: 320px;
   padding: 10px;
 }
